@@ -28,3 +28,22 @@ func (h *handler) ListProducts(w http.ResponseWriter, r *http.Request) {
 
 	json.Write(w, http.StatusOK, products)
 }
+
+func (h *handler) GetProductById(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	val, match := ctx.Value("id").(int64)
+
+	if !match {
+		json.Write(w, http.StatusBadRequest, "invalid id type")
+		return
+	}
+
+	if product, err := h.service.GetProductById(ctx, val); err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+
+	} else {
+		json.Write(w, http.StatusOK, product)
+	}
+}
