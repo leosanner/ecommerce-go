@@ -1,5 +1,7 @@
 package main
 
+import "log"
+
 func main() {
 	cfg := config{
 		addr: ":8080",
@@ -9,5 +11,7 @@ func main() {
 		config: cfg,
 	}
 
-	
+	if err := api.run(api.mount()); err != nil {
+		log.Fatal(err)
+	}
 }
