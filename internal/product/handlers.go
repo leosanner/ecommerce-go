@@ -3,7 +3,9 @@ package product
 import (
 	"log"
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/leosanner/ecommerce-go/internal/json"
 )
 
@@ -31,14 +33,15 @@ func (h *handler) ListProducts(w http.ResponseWriter, r *http.Request) {
 
 func (h *handler) GetProductById(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	val, match := ctx.Value("id").(int64)
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
 
-	if !match {
+	if err != nil {
 		json.Write(w, http.StatusBadRequest, "invalid id type")
 		return
 	}
 
-	if product, err := h.service.GetProductById(ctx, val); err != nil {
+	if product, err := h.service.GetProductById(ctx, id); err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
