@@ -7,11 +7,14 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/jackc/pgx/v5"
+	repo "github.com/leosanner/ecommerce-go/internal/adapters/postgresql/sqlc"
 	"github.com/leosanner/ecommerce-go/internal/product"
 )
 
 type application struct {
 	config config
+	db     *pgx.Conn
 }
 
 func (app *application) mount() http.Handler {
@@ -32,7 +35,7 @@ func (app *application) mount() http.Handler {
 		w.Write([]byte("hi"))
 	})
 
-	productService := product.NewService()
+	productService := product.NewService(repo.New(app.db))
 	productHandler := product.NewHandler(productService)
 
 	r.Get("/products", productHandler.ListProducts)
