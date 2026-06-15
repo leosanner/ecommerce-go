@@ -18,7 +18,7 @@ func NewHandler(s Service) *handler {
 }
 
 func (h *handler) ListProducts(w http.ResponseWriter, r *http.Request) {
-	err := h.service.ListProducts(r.Context())
+	products, err := h.service.ListProducts(r.Context())
 
 	if err != nil {
 		log.Println(err)
@@ -26,5 +26,5 @@ func (h *handler) ListProducts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.Write(w, http.StatusOK, "err")
+	json.Write(w, http.StatusOK, products)
 }
