@@ -1,6 +1,9 @@
 package product
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
 type handler struct {
 	service Service
@@ -13,5 +16,7 @@ func NewHandler(s Service) *handler {
 }
 
 func (h *handler) ListProducts(w http.ResponseWriter, r *http.Request) {
+	sample := []string{"ola"}
 
+	json.NewEncoder(w).Encode(sample)
 }

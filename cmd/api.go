@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/leosanner/ecommerce-go/internal/product"
 )
 
 type application struct {
@@ -31,6 +32,9 @@ func (app *application) mount() http.Handler {
 		w.Write([]byte("hi"))
 	})
 
+	productHandler := product.NewHandler(nil)
+
+	r.Get("/products", productHandler.ListProducts)
 	return r
 }
 
