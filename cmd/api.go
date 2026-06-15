@@ -40,7 +40,7 @@ func (app *application) mount() http.Handler {
 
 	r.Route("/products", func(r chi.Router) {
 		r.Get("/", productHandler.ListProducts)
-		r.Get("/{id}", )
+		r.Get("/{id}", productHandler.GetProductById)
 	})
 
 	return r
