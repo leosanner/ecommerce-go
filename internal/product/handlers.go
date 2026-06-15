@@ -1,6 +1,7 @@
 package product
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/leosanner/ecommerce-go/internal/json"
@@ -17,7 +18,13 @@ func NewHandler(s Service) *handler {
 }
 
 func (h *handler) ListProducts(w http.ResponseWriter, r *http.Request) {
-	sample := []string{"ola"}
+	err := h.service.ListProducts(r.Context())
 
-	json.Write(w, http.StatusOK, sample)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.Write(w, http.StatusOK, "err")
 }
